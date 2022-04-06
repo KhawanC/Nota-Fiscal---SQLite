@@ -1,6 +1,6 @@
 import sqlite3 as sq
 from PIL import Image, ImageFont, ImageDraw 
-#--------------------------------------
+#---------------------------------------
 #imports SQL (Manipulação do SQLite)
 
 dados_banco = sq.connect('banco_db.db') #Se conecta com o banco (se arquivo nao existir cria um arquivo db)
