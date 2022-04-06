@@ -1,0 +1,123 @@
+create table endereco (
+id integer primary key autoincrement,
+rua varchar (255) not null,
+bairro varchar (255) not null,
+cidade varchar (255) not null,
+estado varchar (255) not null,
+pais varchar (255) not null,
+cep varchar (255) not null
+);
+
+create table usuario (
+id integer primary key autoincrement,
+nome varchar (255) not null,
+nome_usuario varchar (255) not null,
+data_nascimento date not null,
+cpf varchar (11) not null,
+telefone integer not null,
+email varchar (255) not null,
+numero_casa varchar (255) not null,
+complemento varchar (255),
+id_endereco integer not null,
+foreign key (id_endereco) references endereco (id)
+);
+
+create table categoria (
+id integer primary key autoincrement,
+nome varchar (255) not null,
+descricao varchar not null
+);
+
+create table pedido (
+id integer primary key autoincrement,
+id_usuario integer not null,
+data_pedido date not null,
+foreign key (id_usuario) references usuario (id) 
+);
+
+create table produto (
+id integer primary key autoincrement,
+nome varchar (255) not null,
+descricao varchar not null,
+quantidade_estoque integer not null,
+data_fabricacao date not null,
+valor_unitario real not null,
+id_categoria integer not null,
+id_vendedor integer not null,
+foreign key (id_categoria) references categoria (id),
+foreign key (id_vendedor) references usuario (id)
+);
+
+create table produto_pedido (
+id integer primary key autoincrement,
+quantidade integer not null,
+id_pedido integer not null,
+id_produto integer not null,
+foreign key (id_pedido) references pedido (id),
+foreign key (id_produto) references produto (id)
+);
+
+INSERT INTO endereco
+(rua, bairro, cidade, estado, pais, cep)
+VALUES('R. Pastor Silvio Lopes', 'Santa Cruz', 'Duque de Caxias', 'Rio de Janeiro', 'Brasil', '25240-260'),
+('Rua da Imperatriz', 'Centro', 'Petrópolis', 'RJ', 'Brasil', '25610-320'),
+('Rua Barbosa', 'Bela Vista', 'São Paulo', 'São Paulo', 'Brazil', '17209-008'),
+('Luiz A. Pereira', 'Aterrado', 'Volta Redonda', 'Rio de Janeiro', 'Brasil', '27213-240'),
+('R. Uruguai ', 'Tijuca', 'Rio de Janeiro', 'Rio de Janeiro', 'Brasil', '20510-055');
+
+INSERT INTO usuario
+(nome, nome_usuario, data_nascimento, cpf, telefone, email, numero_casa, complemento, id_endereco)
+VALUES('Kaua Cassiano Egypto Gomes', 'KauaC', '2004/01/22', '19999999991', '21999999999', 'kauacassiano999@gmail.com','3' ,'Lote 9 Quadra 9', 1),
+('Pedro Henrique', 'pedro12301', '2002/10/16', '92920469002', 6321628372, 'pedrocurioni@gmail.com', '6321628372', 'Apartamento 2', 5),
+('Pedro de Alcântara João Carlos Leopoldo Salvador Bibiano Francisco Xavier de Paula Leocádio Miguel Gabriel Rafael Gonzaga de Bragança e Bourbon', 'D. Pedro II', '1825/12/2', '00000000191', 242233-0300, 'mimp.faleconosco@museus.gov.br', '220', '', 2),
+('Ester Baltazar', 'esterb', '2000/12/30', '16208045187', 24992584661, 'esterbaltazar@gmail.com', '244', 'Ap 104', 4 ),
+('Fabiano Rodrigues Rosa', 'Fabiano', '1987/09/04', '11589611405', 24981432216, 'fabianor.info4@gmail.com', '212', 'Fundos', 3);
+
+INSERT INTO categoria
+(nome, descricao)
+VALUES('Papelaria', 'Artigos de material escolar e papelaria em geral'),
+('Casa e Decoração', 'Compreende itens que estilisam seu lar de maneira agradável e aconchegante para onde sempre adoramos voltar'),
+('Livros', 'Encontra-se aqui livros novos, dos mais diversos autores e categorias'),
+('Animais Domésticos', 'Artigos para o trato de animais domésticos, como coleiras, guias, focinheiras, etc...'),
+('celulares', 'Itens para proteger seu celular, capinhas, películas de vidro, decoração, fones de ouvido, carregadores, etc');
+
+INSERT INTO produto
+(nome, descricao, quantidade_estoque, data_fabricacao, valor_unitario, id_categoria, id_vendedor)
+VALUES('Sanitario Canino', 'Este sanitário é apropriado para cães de pequeno e médio porte, tem uma grade na parte superior e um reservatório na parte inferior e duas travas laterais junto as abas. No reservatório pode ser colocado um jornal ou outro tipo de lenço, caso queira que o xixi seque. A parte superior e a parte inferior são encaixadas e se separam.', 50, '2022/01/01', 22.90, 4, 1),
+('A Sociedade do Anel', 'O volume inicial de O Senhor dos Anéis, lançado originalmente em julho de 1954, foi o primeiro grande épico de fantasia moderno, conquistando milhões de leitores e se tornando o padrão de referência para todas as outras obras do gênero até hoje. A imaginação prodigiosa de J.R.R. Tolkien e seu conhecimento profundo das antigas mitologias da Europa permitiram que ele criasse um universo tão complexo e convincente quanto o mundo real.', 20, '2019/12/09', 34.90, 3, 2),
+('E não sobrou nenhum', 'Uma ilha misteriosa, um poema infantil, dez soldadinhos de porcelana e muito suspense são os ingredientes com que Agatha Christie constrói seu romance mais importante. Na ilha do Soldado, antiga propriedade de um milionário norte-americano, dez pessoas sem nenhuma ligação aparente são confrontadas por uma voz misteriosa com fatos marcantes de seus passados.',13, '2017/09/15', 31.08, 3, 2),
+('A Culpa É das Estrelas', 'Hazel é uma paciente terminal. Ainda que, por um milagre da medicina, seu tumor tenha encolhido bastante — o que lhe dá a promessa de viver mais alguns anos —, o último capítulo de sua história foi escrito no momento do diagnóstico. Mas em todo bom enredo há uma reviravolta, e a de Hazel se chama Augustus Waters, um garoto bonito que certo dia aparece no Grupo de Apoio a Crianças com Câncer. Juntos, os dois vão preencher o pequeno infinito das páginas em branco de suas vidas.',5, '2021/05/25', 29.95, 3, 1),
+('Dom Casmurro', 'Prometido para o seminário desde o nascimento, o jovem carioca Bentinho precisa encontrar um jeito de fugir da vida na Igreja e realizar seu verdadeiro sonho: casar-se com a vizinha Capitu. Uma história de paixão, obsessão e ciúme se desenrola, em uma narrativa cheia de reviravoltas, que aos poucos constrói um retrato da sociedade brasileira',30, '2020/02/03', 84.34, 3, 3),
+('Escorredor de talheres - Elefante Rosa', 'O Escorredor Multiuso - Elefante pode ser utilizado em distintos ambientes da sua casa e para diversas funções, como: na cozinha para escorrer os talheres, no banheiro com as escovas de dentes, no escritório para armazenar os lápis e como um vaso para as plantas. Ele não ocupa muito espaço e possui um pequeno dreno na tromba por onde a água escorre', 25, '2021/10/14', 12.99, 1, 3),
+('Timer Ovo Cozido', 'O timer ovo é perfeito para saber o ponto exato que se deseja dos ovos cozidos. É fabricado com resinas específicas para o uso alimentício e não tóxico.', 50, '2021/05/19', 10.90, 1, 2),
+('Trono Imperial', 'Cadeira de madeira maciça e excelente qualidade, seminova, segundo dono', 1, '1822/09/07', 50000.00, 2, 3),
+('Cadeira Gamer Thunderx3', 'Cadeira estilo gamer com controle de altura e inclinação', 37, '2017/06/29', 1500.00, 2, 1),
+('Espelho de banheiro retrátil', 'Excelente espelho com extensor de largura para quando duas pessoas precisam utilizar o espelho', 10866, '2020/03/22', 80.00, 2, 5),
+('Estojo', 'Estojo para lápis e canetas de couro e com zíper', 7, '2022/01/09', 5.00, 1, 4),
+('Grampeador', 'Equipamento para unir papéis com grampos', 86, '2003/12/25', 5.00, 1, 2),
+('Caneta BIC - Azul', 'Caneta esferográfica com tinta azul', 142, '2021/05/03', 0.50, 1, 5),
+('Código Limpo', 'Livro com técnicas para aperfeiçoar a qualidade do código', 9, '2008/08/01', 70.00, 3, 1),
+('As Crônicas de Nárnia - Volume Único', 'Coletânea de todos os livros As Crônicas de Nárnia', 33, '2009/01/01', 80.00, 3, 1),
+('O Nome do Vento (A Crônica do Matador do Rei - Volume 1', 'Ninguém sabe ao certo quem é o herói ou o vilão desse fascinante universo criado por Patrick Rothfuss. Na realidade, essas duas figuras se concentram em Kote, um homem enigmático que se esconde sob a identidade de proprietário da hospedaria Marco do Percurso.', 26, '2009/07/23', 31.70, 3, 3),
+('Peitoral G', 'Coleira peitoral para cães de grande porte', 9, '2022/03/09', 25.90, 4, 2),
+('Ração Seca PremieR Pet Golden Gatos Adultos Frango 1Kg', 'Sabor inigualável: máxima satisfação para o paladar', 29, '2022/03/23', 23.31, 4, 5),
+('Sabor inigualável: máxima satisfação para o paladar 350g', 'A Ração Megazoo Mix para Calopsitas é um alimento para aves ornamentais indicado para calopsitas, agapornis, e outros psitacídeos de médio porte, tais como ring necks, roselas, maritacas etc.', 12, '2021/12/04', 27.99, 4, 2),
+('Toalha de Piso', 'Imagine um piso para banheiro super macio, grande, encorpado, com 680g/m², 100% algodão, super absorvente, com cores lindas e qualidade inigualável! ', 100, '2020/04/05', 15.45, 1, 4),
+('Capinha', 'A capinha de silicone rosa confere proteção para seu aparelho. Possui entradas feitas sob medida de cada modelo de celular para que não atrapalhe a experiência.', 30, '2019/05/03', 19.90, 5, 5),
+('Comedouro /Bebedouro Inox Antiderrapante Para Pet Cachorro Gato Porte Pequeno Médio Grande', 'Atualmente a tendência dos comedouros é vir em três principais materiais: plástico, alumínio e aço inoxidável. Sendo a opção mais segura e recomendada para seu pet os acessórios de alimentação em aço inoxidável. A tarefa de escolher qual modelo e material de comedouro escolher é facilitada com este comedouro em aço inox. Você estará adquirindo o melhor em termos de praticidade de higienização, segurança, baixo custo e durabilidade! Feito em material antiferrrugem e base antiderrapante para sua maior praticidade e a segurança de seu pet.', 50, '2020/11/03', 29.99, 4, 1),
+('Película de vidro', 'A película de vidro 3D foi feita especialmente pensando na segurança de seu aparelho. Antirrachaduras e arranhões. Fácil aplicação. Inclui tecido embebido em substância para preparar o aparelho. ', 25, '2020/06/30', 11.99, 5, 5),
+('Xiaomi Redmi Note 10S', 'Smartphone Xiaomi Redmi Note 10s 6gb Ram 128gb armazenamento, sendo uma parte usada para o sistema operacional e aplicativos pré-instalados de fábrica. Versão indiana com ROM Global Tipo: Barra Som: MP3 Player Grava vídeo: Sim Slot para cartão: MicroSD ate 512GB Cartão incluso: Não. Radio FM: Sim MP3 player: Sim Wi-Fi: Sim Suporte a GPS: Sim Sistema Operacional: Android 11 MIUI 12 Processador: MediaTek Helio G95 Octa Core de 2,05 Ghz. Características Gerais - Processador Media Tek Helio G95O Octa-core - Bateria de alta capacidade 5000mAh - Carregamento rápido de 33 W - Tela FHD+ com 6.43 e proporção 20:9 (com 91%25 de aproveitamento de tela) - Alto falantes duplos - Controle remoto ir, Acelerômetro, Proximidade, Giroscópio, bussola, Sensor de luz ambiente, Motor de vibração, microfone de redução de ruído, reconhecimento facial, sensor de impressão digital lateral Conectividade: USB-C, Bluetooth 5.0, Wi-Fi 802.11 a/b/g/n/ac 2.4GHz e 5GHz Frequências: GSM 850/1900 MHz Quadriband GSM: Sim Resolução do visor/display (pixels): FHD+ (2400x1080) Tamanho do visor (cm): 16,04 x 7,45 Tipo do Chip: Nano SIM Bateria removível: Não. Bateria: 5000 mAh. Câmera/Resolução câmera frontal: 13MP. Traseira traseira quadrupla: 64MP+8MP+2MP+2MP Tensão/Voltagem: bivolt. NÃO possui NFC. Conteúdo da Embalagem - Smartphone Xiaomi Redmi Note 10S - Capa protetora - Cabo de carregamento (Cabo Usb Tipo C) - Fonte do carregador indiana com adaptador - Ferramenta ejetora de chip - Manual - Garantia de 90 dias contra defeitos de fabricação, a contar do recebimento do produto.', 40, '2021/05/10', 1367, 5, 5),
+('Fone de ouvido', 'Recursos: 1.Equipado com um driver de 10 mm, ele oferece um som incrível e uma experiência de audição agradável. 2. Construído em bateria de grande capacidade, tempo de trabalho de até 12 horas, tempo de espera de 7 dias. 3. Com o chip Bluetooth 5.0, garanta uma conexão rápida e estável. Taxa impermeável 4.IPx4, para garantir que o fone de ouvido à prova de chuva, à prova de suor. 5.Construído em chip de proteção, sobrecarga, temperatura, potência, proteção do núcleo. 6. Fone de ouvido com design ergonômico para conforto a longo prazo. 7. Microfone de cancelamento de ruído CVC. 8. Design magnético para fácil armazenamento. Especificações: Marca: Lenovo Modelo: lp1s Versão Bluetooth: 5.0 Distância de transmissão: 10M (sem barreira) À prova da água: IPx4 Tempo de trabalho: cerca de 10 horas Tempo de carregamento: cerca de 1,5 horas Bateria da caixa de carregamento: 250mah Bateria do fone de ouvido: 40 Mah Diâmetro do chifre: 10 mm Faixa de resposta de frequência: 20-20 KHz Lista de embalagem: 2 * fones de ouvido 1 * compartimento de carga 1 * cabo de carregamento 4 * plugue de ouvido 1 * manual de instruções', 15, '2021/10/31', 150.00, 5, 5);
+
+INSERT INTO pedido
+(id_usuario, data_pedido)
+VALUES
+(1, '2022/01/11'),
+(1, '2022/01/11'),
+(1, '2022/01/11'),
+(4, '2022/04/05'),
+(2, '2021/12/15'),
+(5, '2022/02/01'),
+(5,'2022/03/15'),
+(3, '2021/07/07');
+
